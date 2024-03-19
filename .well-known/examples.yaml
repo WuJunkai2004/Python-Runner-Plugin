@@ -1,0 +1,11 @@
+version: 0.0.1
+examples:
+  - context:
+    - role: user
+      content: 请帮我写一段python代码
+    - role: bot
+      plugin:
+        operationId: run_python
+        thoughts: 这是一个生成python代码的需求
+        requestArguments:
+          code: print("Hello, World!")

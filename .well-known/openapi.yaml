@@ -1,0 +1,43 @@
+openapi: 3.0.1
+info:
+    title: Python Runner
+    description: 实时运行文心一言生成的python代码。
+    version: "v1"
+servers:
+    - url: http://localhost:8081
+paths:
+    /run_python:
+        post:
+            operationId: run_python
+            summary: 运行python代码
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [code]
+                            properties:
+                                code:
+                                    type: string
+                                    description: 需要运行的python代码
+            responses:
+                "200":
+                    description: 代码运行成功
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/python_result"
+
+components:
+    schemas:
+        python_result:
+            type: object
+            required: [result, error]
+            properties:
+                result:
+                    type: string
+                    description: 运行结果
+                error:
+                    type: string
+                    description: 错误信息

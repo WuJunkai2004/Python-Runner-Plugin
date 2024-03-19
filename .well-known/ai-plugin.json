@@ -1,0 +1,20 @@
+{
+    "schema_version": "0.01",
+    "name_for_human": "Python Runner",
+    "name_for_model": "py_runner_0_01",
+    "description_for_human": "实时运行文心一言生成的python代码",
+    "description_for_model": "当生成python代码时, 获取python代码, 发送到服务器上, 查看运行结果",
+    "auth": {
+        "type": "none"
+    },
+    "api":{
+        "type": "openapi",
+        "url": "http://localhost:8081/.well-known/openapi.yaml"
+    },
+    "logo_url": "http://localhost:8081/logo.png",
+    "contact_email": "wu.junkai@qq.com",
+    "legal_info_url": "http://www.example.com/legal",
+    "examples": {
+        "url": "http://localhost:8081/.well-known/examples.yaml"
+    }
+}
