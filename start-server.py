@@ -20,7 +20,7 @@ class handler(vercel.API):
         if(os.path.isdir(url)):
             self.send_code(200)
             self.send_header('Content-Type','plain/text')
-            self.send_header('Access-Control-Allow-Origin','https://yiyan.baidu.com')
+#            self.send_header('Access-Control-Allow-Origin','https://yiyan.baidu.com')
             self.send_text( '\n'.join(os.listdir(url)) )
             return
 
@@ -29,8 +29,15 @@ class handler(vercel.API):
                 vercel.ErrorStatu(self, 403)
                 return
             self.send_code(200)
+            if(vercel.file_type(url.split('.')[-1])[:5] == 'image'):
+                self.send_header('Access-Control-Allow-Origin','*')
+                self.send_header('Content-Type',vercel.file_type(url.split('.')[-1]))
+                self.send_header('Content-Length',str(os.path.getsize(url)))
+                self.send_header('Connection','keep-alive')
+                self.send_file(url)
+                return
             self.send_header('Access-Control-Allow-Origin','https://yiyan.baidu.com')
-            self.send_header('Content-Type','application/json')
+            self.send_header('Content-Type',vercel.file_type(url.split('.')[-1]))
             self.send_header('Content-Length',str(os.path.getsize(url)))
             self.send_file(url)
             return

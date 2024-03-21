@@ -28,6 +28,23 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/python_result"
+    /load_run_bar:
+        get:
+            operationId: load_run_bar
+            summary: 获取代码的运行按钮
+            responses:
+                "200":
+                    description: 获取成功
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/load_run_bar"
+            x-return-raw:
+                description: 标记当前 API 请求的结果是否经过大模型，当 name 的值不空时，从插件结果中获取具体字段，类型必须 String，直接返回，而不经过大模型。
+                mediaType: application/json
+                name: this_is_a_field_name
+                type: string
+
 
 components:
     schemas:
@@ -41,3 +58,10 @@ components:
                 error:
                     type: string
                     description: 错误信息
+        load_run_bar:
+            type: object
+            required: [img]
+            properties:
+                img:
+                    type: string
+                    description: 运行按钮的图片url

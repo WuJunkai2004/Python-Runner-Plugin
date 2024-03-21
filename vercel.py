@@ -11,6 +11,26 @@ import sys
 import time
 
 
+def file_type(suffix):
+    if suffix in ['html','htm']:
+        return 'text/html'
+    if suffix in ['css']:
+        return 'text/css'
+    if suffix in ['js']:
+        return 'application/javascript'
+    if suffix in ['json']:
+        return 'application/json'
+    if suffix in ['xml']:
+        return 'application/xml'
+    if suffix in ['png']:
+        return 'image/png'
+    if suffix in ['jpg','jpeg']:
+        return 'image/jpeg'
+    if suffix in ['gif']:
+        return 'image/gif'
+    return 'application/octet-stream'
+
+
 class ErrorStatu:
     '''<html><head><meta http-equiv="Content-type" content="text/html; charset=utf-8"><title>%s</title><style type="text/css">
     body {background-color: #f1f1f1;margin: 0;font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;}

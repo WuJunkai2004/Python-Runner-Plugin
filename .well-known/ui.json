@@ -1,0 +1,27 @@
+{
+    "ui": [
+        {
+            "operationId": "load_run_bar",
+            "component": {
+                "type": "image",
+                "props": {
+                    "src": "localhost:8081/image/run_bar.png",
+                    "buttonGroup": [
+                        {
+                            "text": "运行",
+                            "icon": "edit"
+                        }
+                    ]
+                },
+                "events": {
+                    "click-0": [{
+                        "action": "sendPrompt",
+                        "option": {
+                            "msg": "将完整代码正确地发送到服务器，等待运行结果"
+                        }
+                    }]
+                }
+            }
+        }
+    ]
+}
