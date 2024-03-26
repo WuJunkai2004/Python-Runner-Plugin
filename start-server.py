@@ -1,12 +1,9 @@
-from imp  import load_source
-from io   import StringIO
 from http import server
 
 import os
-import sys
 import vercel
 
-def Start(handler = vercel.API, port = 8081):
+def Start(handler = vercel.API, port = 8787):
     server.test(
         HandlerClass = handler,
         ServerClass = server.ThreadingHTTPServer,
@@ -40,11 +37,6 @@ class handler(vercel.API):
             self.send_header('Content-Type',vercel.file_type(url.split('.')[-1]))
             self.send_header('Content-Length',str(os.path.getsize(url)))
             self.send_file(url)
-            return
-
-        if(os.path.isfile(url + '.py')):
-            mod = load_source(url,url + '.py')
-            mod.handler.vercel(self, url, data, headers)
             return
 
         vercel.ErrorStatu(self, 404)

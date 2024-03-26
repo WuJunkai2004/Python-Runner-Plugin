@@ -25,14 +25,14 @@ new MutationObserver((mutationsList, mutationObserver) => {
             code.setAttribute('is-done', true);
             // add the display block
             let id = Math.random().toString(36).slice(-8);
-            let new_block = code.parentNode.cloneNode(true);
-            new_block.setAttribute('id', id);
-            new_block.querySelectorAll('.code-copy').forEach(element => element.remove());
-            new_block.querySelector('.code-lang').innerText = 'output';
-            new_block.querySelector('tbody').innerHTML = '';
-            new_block.querySelector('tbody').setAttribute('id', id + '_output');
-            new_block.setAttribute('hidden', true);
-            insert_after(new_block, code.parentNode);
+            let result = code.parentNode.cloneNode(true);
+            result.setAttribute('id', id);
+            result.querySelectorAll('.code-copy').forEach(element => element.remove());
+            result.querySelector('.code-lang').innerText = 'output';
+            result.querySelector('tbody').innerHTML = '';
+            result.querySelector('tbody').setAttribute('id', id + '_output');
+            result.setAttribute('hidden', true);
+            insert_after(result, code.parentNode);
             // get the code script
             let tr_list = code.getElementsByTagName('tr');
             let code_text = `def print(*args,sep=' ', end='\\n', file='', flush='', init=False):\n` +
@@ -47,24 +47,21 @@ new MutationObserver((mutationsList, mutationObserver) => {
             for(let tr of tr_list){
                 code_text += tr.innerText.slice(1) + '\n';
             }
-            let script = document.createElement('script');
-            script.innerText = code_text;
-            script.id = id + '_script';
-            // show the run button
-            let button = code.getElementsByClassName('code-copy')[0];
-            let new_button = button.cloneNode(true);
-            new_button.addEventListener('click', () => {
+            // show the run cpy_button
+            let cpy_button = code.getElementsByClassName('code-copy')[0];
+            let run_button = cpy_button.cloneNode(true);
+            run_button.addEventListener('click', () => {
                 console.log(code_text);
                 try{
-                    __BRYTHON__.runPythonSource(code_text, script.id);
+                    __BRYTHON__.runPythonSource(code_text, id);
                 } catch(e) {
-                    document.getElementById(id + '_output').innerHTML += '\nError: 因未知错误而退出\n';
+                    document.getElementById(id + '_output').innerHTML += '\nError: 因错误而退出\n';
                     document.getElementById(id).hidden = false;
                     console.log(e);
                 }
             });
-            new_button.getElementsByClassName('code-copy-text')[0].innerText = '运行代码';
-            insert_after(new_button, button);
+            run_button.getElementsByClassName('code-copy-text')[0].innerText = '运行代码';
+            insert_after(run_button, cpy_button);
         }
     }, 2000);
     localStorage.setItem('last_time', last_time);
@@ -72,4 +69,4 @@ new MutationObserver((mutationsList, mutationObserver) => {
     childList: true,
     subtree: true,
     characterData: true
-})
+});

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Python Runner for AI
 // @namespace    http://tampermonkey.net/
-// @version      2024-03-23
+// @version      2024-03-26
 // @description  Python Runner for AI
 // @author       WuJunkai2004
 // @match        https://yiyan.baidu.com
@@ -9,23 +9,23 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=baidu.com
 // @grant        unsafeWindow
 // ==/UserScript==
-var random_str = Math.random().toString(36).slice(-8);
 async function inject_runner(){
+    var random_str = Math.random().toString(36).slice(-8);
     var script = document.createElement('script');
-    script.src = 'http://localhost:8081/runner.js?' + random_str;
+    script.src = 'http://localhost:8787/runner.js?' + random_str;
     document.body.appendChild(script);
 }
 
 async function inject_stdlib(){
     var script = document.createElement('script');
-    script.src = 'http://localhost:8081/brython_stdlib.js?' + random_str;
+    script.src = 'http://localhost:8787/brython_stdlib.js';
     script.onload = inject_runner;
     document.body.appendChild(script);
 }
 
 async function inject_brython(){
     var script = document.createElement('script');
-    script.src = 'http://localhost:8081/brython.min.js?' + random_str;
+    script.src = 'http://localhost:8787/brython.min.js';
     script.onload = inject_stdlib;
     document.body.appendChild(script);
 }
