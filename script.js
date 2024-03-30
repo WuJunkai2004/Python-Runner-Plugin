@@ -1,30 +1,51 @@
 // ==UserScript==
 // @name         Python Runner for AI
 // @namespace    http://tampermonkey.net/
-// @version      2024-03-26
+// @version      2024-03-30
 // @description  Python Runner for AI
 // @author       WuJunkai2004
-// @match        https://yiyan.baidu.com
-// @match        http://yiyan.baidu.com
+// @match        *://yiyan.baidu.com
+// @match        *://tongyi.aliyun.com/qianwen/
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=baidu.com
 // @grant        unsafeWindow
 // ==/UserScript==
+function get_site_info(){
+    let url = window.location.href;
+    let support = [
+        {
+            'site': 'baidu',
+            'id': '#DIALOGUE_CONTAINER_ID',
+            "cmd": "for_baidu();"
+        },{
+            'site': 'aliyun',
+            'id': '#chat-content',
+            "cmd": "for_aliyun();"
+        }
+    ]
+    for(let site of support){
+        if(url.includes(site['site'])){
+            return site;
+        }
+    }
+}
+
+
 async function inject_runner(){
-    var random_str = Math.random().toString(36).slice(-8);
-    var script = document.createElement('script');
+    let random_str = Math.random().toString(36).slice(-8);
+    let script = document.createElement('script');
     script.src = 'http://localhost:8787/runner.js?' + random_str;
     document.body.appendChild(script);
 }
 
 async function inject_stdlib(){
-    var script = document.createElement('script');
+    let script = document.createElement('script');
     script.src = 'http://localhost:8787/brython_stdlib.js';
     script.onload = inject_runner;
     document.body.appendChild(script);
 }
 
 async function inject_brython(){
-    var script = document.createElement('script');
+    let script = document.createElement('script');
     script.src = 'http://localhost:8787/brython.min.js';
     script.onload = inject_stdlib;
     document.body.appendChild(script);
@@ -35,10 +56,11 @@ async function sleep(ms){
 }
 
 async function get_dialogue_container(){
-    var first_time = true;
-    var container = null;
+    let first_time = true;
+    let container = null;
+    let id = get_site_info()['id'];
     do{
-        container = document.querySelector('#DIALOGUE_CONTAINER_ID');
+        container = document.querySelector(id);
         if(first_time != true){
             await sleep(1000);
         } else {
@@ -51,5 +73,6 @@ async function get_dialogue_container(){
 (async function() {
     'use strict';
     await get_dialogue_container();
+    console.log('Python Runner for AI is running...');
     await inject_brython();
 })();
