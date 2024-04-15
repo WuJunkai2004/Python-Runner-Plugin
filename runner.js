@@ -22,6 +22,12 @@ function get_site_info(){
     }
 }
 
+function generate_run_svg(size){
+    //M3 2 L26 16 L3 30 L5 26 L22 16 L5 6 L5 26 L3 30 Z
+    //it is for 32*32
+    return `M${size*0.09375} ${size*0.0625} L${size*0.8125} ${size*0.5} L${size*0.09375} ${size*0.9375} L${size*0.15625} ${size*0.8125} L${size*0.6875} ${size*0.5} L${size*0.15625} ${size*0.1875} L${size*0.15625} ${size*0.8125} L${size*0.09375} ${size*0.9375} Z`
+}
+
 function for_baidu(){
     function insert_after(new_node, target_node){
         let parent = target_node.parentNode;
@@ -75,7 +81,7 @@ function for_baidu(){
                 console.log(e);
             }
         });
-        run_button.querySelector('path').setAttribute('d', 'M3 2 L26 16 L3 30 L5 26 L22 16 L5 6 L5 26 L3 30 Z');
+        run_button.querySelector('path').setAttribute('d', generate_run_svg(32));
         run_button.getElementsByClassName('code-copy-text')[0].innerText = '运行代码';
         insert_after(run_button, cpy_button);
     }
