@@ -6,6 +6,7 @@
 // @author       WuJunkai2004
 // @match        *://yiyan.baidu.com
 // @match        *://tongyi.aliyun.com/qianwen/
+// @match        *://gemini.google.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=baidu.com
 // @grant        unsafeWindow
 // ==/UserScript==
@@ -15,15 +16,19 @@ function get_site_info(){
         {
             'site': 'baidu',
             'id': '#DIALOGUE_CONTAINER_ID',
-            "cmd": "for_baidu();"
+            "cmd": "for_baidu;"
         },{
             'site': 'aliyun',
             'id': '#chat-content',
-            "cmd": "for_aliyun();"
+            "cmd": "for_aliyun;"
+        },{
+            'site': 'gemini',
+            'id': '.content-wrapper',
+            "cmd": "for_gemini;"
         }
     ]
     for(let site of support){
-        if(url.includes(site['site'])){
+        if(url.includes(site.site)){
             return site;
         }
     }
@@ -58,7 +63,7 @@ async function sleep(ms){
 async function get_dialogue_container(){
     let first_time = true;
     let container = null;
-    let id = get_site_info()['id'];
+    let id = get_site_info().id;
     do{
         container = document.querySelector(id);
         if(first_time != true){
