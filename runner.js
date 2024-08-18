@@ -2,21 +2,21 @@ function get_site_info(){
     let url = window.location.href;
     let support = [
         {
-            'site': 'yiyan',
+            'site': 'yiyan.baidu.com',
             'id': '#DIALOGUE_CONTAINER_ID',
             "cmd": "for_baidu;"
         },{
-            'site': 'tongyi',
+            'site': 'tongyi.aliyun.com',
             'id': '#chat-content',
             "cmd": "for_aliyun;"
         },{
-            'site': 'gemini',
+            'site': 'gemini.google.com',
             'id': '.content-wrapper',
             "cmd": "for_gemini;"
         },{
-            "site": "xfyun", // 讯飞星火
-            "id": "#chat-content",
-            "cmd": "for_xinghuo;"
+            "site": "chatgpt.com",
+            "id": ".pb-9",
+            "cmd": "for_chatgpt;"
         }
     ]
     for(let site of support){
@@ -154,6 +154,47 @@ function for_aliyun(){
         });
         insert_after(run_button, cpy_button);
         console.log('done');
+    }
+}
+
+function for_chatgpt(){
+    function insert_after(new_node, target_node){
+        let parent = target_node.parentNode;
+        if(parent.lastChild == target_node){
+            parent.appendChild(new_node);
+        } else {
+            parent.insertBefore(new_node, target_node.nextSibling);
+        }
+    };
+    let code_block = document.querySelectorAll('pre');
+    for(let code of code_block){
+        let is_done = code.getAttribute('is-done') || null;
+        if(is_done){
+            continue;
+        }
+        code.setAttribute('is-done', true);
+        // 排除掉不是python的代码块
+        if(code.querySelector('span').innerText !== 'python'){
+            continue;
+        }
+        // 添加显示结果的代码块
+        let id = Math.random().toString(36).slice(-8);
+        let result = code.cloneNode(true);
+        result.setAttribute('id', id);
+        result.querySelector('span').nextElementSibling.remove()
+        result.querySelector('span').innerText = 'output';
+        let code_text = `def print(*args,sep=' ', end='\\n', file='', flush='', init=False):\n` +
+                        '    from browser import document\n' +
+                        '    text = " " + sep.join(list(map(str, args)))\n' +
+                        '    if init:\n' +
+                        `        document['${id}_output'].innerHTML = ''\n` +
+                        '        return\n' +
+                        `    document['${id}'].hidden = False\n` +
+                        `    document['${id}_output'].innerHTML += text + end\n` +
+                        'print(init=True)\n';
+        code_text += code.querySelector('code').innerText + '\n';
+        result.querySelector('code').innerHTML = '';
+        console.log(code_text);
     }
 }
 
